@@ -74,13 +74,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.takehome"
+    namespace "dev.takehome"
     defaultConfig {
-        applicationId "com.takehome"
+        applicationId "dev.takehome"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0."
     }
     signingConfigs {
         debug {

@@ -1,4 +1,4 @@
-package com.takehome
+package dev.takehome
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -1,4 +1,4 @@
-package com.takehome
+package dev.takehome
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
