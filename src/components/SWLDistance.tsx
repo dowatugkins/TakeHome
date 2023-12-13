@@ -65,7 +65,10 @@ function SWLDistance(): React.JSX.Element {
               setPermissions('unavailable');
               break;
             case RESULTS.DENIED:
-              requestPermissions(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+              setPermissions('denied');
+              if (permissions !== 'denied') {
+                requestPermissions(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+              }
               break;
             case RESULTS.LIMITED:
               setPermissions('limited');
@@ -91,7 +94,10 @@ function SWLDistance(): React.JSX.Element {
               setPermissions('unavailable');
               break;
             case RESULTS.DENIED:
-              requestPermissions(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+              setPermissions('denied');
+              if (permissions !== 'denied') {
+                requestPermissions(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+              }
               break;
             case RESULTS.LIMITED:
               setPermissions('limited');
@@ -129,10 +135,10 @@ function SWLDistance(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      {hasError ? (
+      {hasError || permissions === 'denied' || permissions === 'blocked' ? (
         <Text style={[styles.error, styles.heading]}>
           We need location permissions to tell you how close you are to Star
-          Wars Land! Error {hasError.message}
+          Wars Land! Error {hasError ? hasError.message : 'permissions denied'}
         </Text>
       ) : (
         <View style={styles.textContainer}>
