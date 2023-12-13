@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 
-import {StarshipType, PilotType, FilmType, useSwapi} from '../hooks/useSwapi';
+import {StarshipType, PilotType, FilmType, useSwapi} from 'hooks/useSwapi';
 
 function SwapiList(): React.JSX.Element {
   const [starships] = useSwapi();

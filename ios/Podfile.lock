@@ -1111,6 +1111,8 @@ PODS:
     - React-jsi (= 0.73.0)
     - React-logger (= 0.73.0)
     - React-perflogger (= 0.73.0)
+  - RNPermissions (4.0.0):
+    - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -1187,6 +1189,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1301,6 +1304,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1364,9 +1369,10 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 77543c74df984ce56c09d49d427149c53784aaf6
   React-utils: 42708ea436853045ef1eaff29996813d9fbbe209
   ReactCommon: 851280fb976399ca1aabc74cc2c3612069ea70a2
+  RNPermissions: 81a89a1638d357a0587b2610522efe846cd6cff0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: dc7c048160282d54a710b33aabdb32c4d0bee852
 
-PODFILE CHECKSUM: 0fc3a596e97deacfa6704488425efa8d9a05b645
+PODFILE CHECKSUM: 059dc6ae1323b59a2302b45b9e36d2d38f5c2d6a
 
 COCOAPODS: 1.14.3
