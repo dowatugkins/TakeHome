@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Platform} from 'react-native';
 import {
   check,
@@ -8,21 +8,27 @@ import {
   Permission,
 } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
+import {convertDistance, getDistance} from 'geolib';
+import {GeolibInputCoordinates} from 'geolib/es/types';
 
-const starWarsLandLocation = '33.814831976267016, -117.92057887641796';
+const starWarsLandLocation = {
+  latitude: 33.814831976267016,
+  longitude: -117.92057887641796,
+};
 
 function SWLDistance(): React.JSX.Element {
-  const distance = 10;
-  const [permissions, setPermissions] = useState<String | undefined>();
+  const [distance, setDistance] = useState<string | number | undefined>();
+  const [permissions, setPermissions] = useState<string | undefined>();
   const [hasError, setHasError] = useState<Error | undefined>();
-  const [userLocation, setUserLocation] = useState<
-    Geolocation.GeoPosition | undefined
-  >();
+  const [userLocation, setUserLocation] = useState<GeolibInputCoordinates>();
 
-  const getLocation = () => {
+  const getLocation = useCallback(() => {
     Geolocation.getCurrentPosition(
       position => {
-        setUserLocation(position);
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
       },
       error => {
         setHasError(new Error(error.message));
@@ -33,18 +39,24 @@ function SWLDistance(): React.JSX.Element {
         maximumAge: 10000,
       },
     );
-  };
+  }, []);
 
-  const requestPermissions = (permType: Permission) => {
-    request(permType).then(result => {
-      setPermissions(result);
-      if (result === RESULTS.GRANTED) {
-        getLocation();
-      }
-    });
-  };
+  const requestPermissions = useCallback(
+    (permType: Permission) => {
+      request(permType).then(result => {
+        setPermissions(result);
+        if (result === RESULTS.GRANTED && !userLocation) {
+          getLocation();
+        }
+      });
+    },
+    [getLocation, userLocation],
+  );
 
   useEffect(() => {
+    if (permissions === 'granted' || permissions === 'limited') {
+      return;
+    }
     if (Platform.OS === 'ios') {
       check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
         .then(result => {
@@ -100,8 +112,20 @@ function SWLDistance(): React.JSX.Element {
     } else {
       setHasError(new Error('Unknown OS, only available on Android and iOS'));
     }
-  }, []);
-  console.log(permissions);
+  }, [getLocation, permissions, requestPermissions]);
+
+  useEffect(() => {
+    if (userLocation !== undefined) {
+      setDistance(
+        Number.parseFloat(
+          convertDistance(
+            getDistance(userLocation, starWarsLandLocation),
+            'mi',
+          ).toString(),
+        ).toFixed(2),
+      );
+    }
+  }, [getLocation, userLocation]);
 
   return (
     <View style={styles.container}>
@@ -111,12 +135,12 @@ function SWLDistance(): React.JSX.Element {
           Wars Land! Error {hasError.message}
         </Text>
       ) : (
-        <>
+        <View style={styles.textContainer}>
           <Text style={styles.heading}>
-            Your current distance to Star Wars Land
+            {distance ? 'Your current distance to Star Wars Land' : 'Loading'}
           </Text>
-          <Text style={styles.distance}>{distance}</Text>
-        </>
+          <Text style={styles.distance}>{distance && distance + ' miles'}</Text>
+        </View>
       )}
     </View>
   );
@@ -129,17 +153,23 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
 
+  textContainer: {
+    alignItems: 'center',
+  },
+
   error: {
     color: 'red',
   },
 
   heading: {
+    textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
   },
 
   distance: {
     fontSize: 16,
+    color: 'blue',
   },
 });
 
