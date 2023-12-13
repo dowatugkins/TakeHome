@@ -25,8 +25,7 @@ function SWLDistance(): React.JSX.Element {
         setUserLocation(position);
       },
       error => {
-        // See error code charts below.
-        console.log(error.code, error.message);
+        setHasError(new Error(error.message));
       },
       {
         enableHighAccuracy: true,
